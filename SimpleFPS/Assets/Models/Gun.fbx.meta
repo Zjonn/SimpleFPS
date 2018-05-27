@@ -57,10 +57,10 @@ ModelImporter:
     globalScale: 150
     meshCompression: 0
     addColliders: 0
-    importVisibility: 0
+    importVisibility: 1
     importBlendShapes: 1
     importCameras: 0
-    importLights: 0
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
