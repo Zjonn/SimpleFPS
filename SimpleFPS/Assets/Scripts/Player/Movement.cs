@@ -6,12 +6,11 @@ using InputManager = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputMa
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
-
     public float speed = 1;
-    public string XAxisName = "AxisX", ZAxisName = "AxisZ";
+    public string xAxisName = "AxisX", zAxisName = "AxisZ";
 
     private Rigidbody rb;
-    private float XAxis, ZAxis;
+    private float xAxis, zAxis;
 
     private void Start()
     {
@@ -20,8 +19,8 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        XAxis = InputManager.GetAxis(XAxisName);
-        ZAxis = InputManager.GetAxis(ZAxisName);
+        xAxis = InputManager.GetAxis(xAxisName);
+        zAxis = InputManager.GetAxis(zAxisName);
     }
 
     // Update is called once per frame
@@ -32,8 +31,8 @@ public class Movement : MonoBehaviour
 
     private void Move()
     {
-        Vector3 normalToForward = new Vector3(transform.forward.z, 0, -transform.forward.x);
-        Vector3 shift = transform.forward * XAxis + normalToForward * ZAxis;
+        Vector3 ortagonalToForward = new Vector3(transform.forward.z, 0, -transform.forward.x);
+        Vector3 shift = transform.forward * zAxis + ortagonalToForward * xAxis;
         shift *= speed * Time.smoothDeltaTime;
 
         rb.MovePosition(rb.position + shift);

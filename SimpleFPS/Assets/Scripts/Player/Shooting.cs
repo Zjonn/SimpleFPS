@@ -6,13 +6,25 @@ using InputManager = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputMa
 
 public class Shooting : MonoBehaviour
 {
-
     public GameObject bulletPrefab;
     public Transform spawnPosition;
     public string ShootButtonName;
     public float breakBetweenShoots = 100;
 
+    public int Accuracy
+    {
+        get { return hit / shootedBullets; }
+    }
+
     private float breakTime;
+
+    private int shootedBullets;
+    private int hit;
+
+    public void ConfirmHit()
+    {
+        ++hit;
+    }
     // Use this for initialization
     void Start()
     {
@@ -23,7 +35,7 @@ public class Shooting : MonoBehaviour
     void Update()
     {
         if (InputManager.GetButton(ShootButtonName) && breakTime <= 0)
-        {            
+        {
             Fire();
             breakTime = breakBetweenShoots;
         }
@@ -33,7 +45,9 @@ public class Shooting : MonoBehaviour
 
     private void Fire()
     {
-        Instantiate<GameObject>(bulletPrefab, spawnPosition.position, transform.rotation);
+        GameObject bullet = Instantiate<GameObject>(bulletPrefab, spawnPosition.position, spawnPosition.rotation);
+        bullet.GetComponent<IBullet>().SetShooter(gameObject);
+        shootedBullets++;
     }
 
     private void OnValidate()

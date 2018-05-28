@@ -2,26 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(Collider))]
-public class BulletHandler : MonoBehaviour
+[RequireComponent(typeof(Collider)), RequireComponent(typeof(Rigidbody))]
+public class BulletHandler : MonoBehaviour, IBullet
 {
     public float speed;
-    public float distanceToDestroy;
+
+    Rigidbody rb;
+    GameObject shooter;
+
+    public void SetShooter(GameObject shooter)
+    {
+        this.shooter = shooter;
+    }
 
     // Update is called once per frame
-    void Update()
+    void Start()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
-        print(transform.forward);
+        rb = GetComponent<Rigidbody>();
+        rb.velocity = transform.forward * speed * Time.deltaTime;
     }
 
     private void OnValidate()
     {
         speed = (speed <= 0) ? 1 : speed;
-        distanceToDestroy = (distanceToDestroy <= 0) ? 1 : distanceToDestroy;
     }
 
     private void OnCollisionEnter(Collision collision)
+    {
+        if (isShooterIsPlayer()) shooter.GetComponent<Shooting>().ConfirmHit();
+        Destroy(gameObject);
+    }
+
+    private bool isShooterIsPlayer()
+    {
+        return shooter != null && shooter.name == "Player";
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
     }
