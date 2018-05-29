@@ -11,7 +11,7 @@ public class EnemyHandler : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform spawnPosition;
     public Transform gun;
-    public float breakBetweenShoots = 100;
+    public float breakBetweenShots = 0.5f;
 
     public IMessage message;
     public int maxHP;
@@ -46,7 +46,7 @@ public class EnemyHandler : MonoBehaviour
         if (breakTime <= 0)
         {
             Fire();
-            breakTime = breakBetweenShoots;
+            breakTime = breakBetweenShots;
         }
         breakTime = (breakTime <= 0) ? 0 : breakTime - Time.deltaTime;
 
@@ -91,10 +91,12 @@ public class EnemyHandler : MonoBehaviour
         hp -= damage;
         if (hp <= 0)
         {
+            hp = 0;
             message.ReciveGameObject(gameObject);
             Destroy(gameObject);
         }
-        else
+        else            
             healthBar.UpdateHP(hp);
+
     }
 }

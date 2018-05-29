@@ -250,7 +250,7 @@ MonoBehaviour:
     type: 2}
   spawnPosition: {fileID: 4707721545608590}
   gun: {fileID: 4995581311283656}
-  breakBetweenShoots: 1
+  breakBetweenShots: 0.5
   maxHP: 10
 --- !u!136 &136960382115670880
 CapsuleCollider:

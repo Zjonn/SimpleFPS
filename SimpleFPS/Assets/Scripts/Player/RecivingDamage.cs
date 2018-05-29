@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecivingDamage : MonoBehaviour {
+public class RecivingDamage : MonoBehaviour
+{
 
     public HealthBar healthBar;
 
@@ -12,19 +13,22 @@ public class RecivingDamage : MonoBehaviour {
 
     float hp;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         hp = maxHP;
         healthBar.Init(maxHP);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
+        print(hp);
         Ammo ammo;
         if (ammo = collision.gameObject.GetComponent<Ammo>())
         {
@@ -37,9 +41,11 @@ public class RecivingDamage : MonoBehaviour {
         hp -= damage;
         if (hp <= 0)
         {
+            hp = 0;
             manager.ReciveGameObject(gameObject);
         }
         else
             healthBar.UpdateHP(hp);
+
     }
 }

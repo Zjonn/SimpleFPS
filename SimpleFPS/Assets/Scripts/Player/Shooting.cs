@@ -9,11 +9,14 @@ public class Shooting : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform spawnPosition;
     public string shootButtonName;
-    public float breakBetweenShoots = 100;
+    public float breakBetweenShots = 0.5f;
 
     public float Accuracy
     {
-        get { return Mathf.Round(hit / (float)shootedBullets * 100); }
+        get
+        {
+            return (shootedBullets == 0) ? 0 : Mathf.Round(hit / (float)shootedBullets * 100);
+        }
     }
 
     float breakTime;
@@ -37,7 +40,7 @@ public class Shooting : MonoBehaviour
         if (InputManager.GetButton(shootButtonName) && breakTime <= 0)
         {
             Fire();
-            breakTime = breakBetweenShoots;
+            breakTime = breakBetweenShots;
         }
         breakTime = (breakTime <= 0) ? 0 : breakTime - Time.deltaTime;
     }
@@ -51,6 +54,6 @@ public class Shooting : MonoBehaviour
 
     private void OnValidate()
     {
-        if (breakBetweenShoots <= 0) breakBetweenShoots = 100;
+        if (breakBetweenShots <= 0) breakBetweenShots = 100;
     }
 }
