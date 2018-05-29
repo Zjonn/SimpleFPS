@@ -2,15 +2,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeathBar : MonoBehaviour
+public class HpFollowingBar : MonoBehaviour
 {
     public Image bar;
+    public GameObject toFollow;
 
     int maxHP;
 
+    const float filledBar = 1;
+
     public void Init(int maxHP)
     {
-        bar.fillAmount = 1;
+        bar.fillAmount = filledBar;
         this.maxHP = maxHP;
     }
 

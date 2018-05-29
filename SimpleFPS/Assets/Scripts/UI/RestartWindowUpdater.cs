@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class RestartWindowUpdater : MonoBehaviour {
 
-    public Text accuracyTxt;
-    public Text topAccuracyTxt;
+    public Text accuracy;
+    public Text topAccuracy;
 	
     public void UpdateText(float accuracy, float topAccuracy)
     {
-        accuracyTxt.text = accuracy + "% trafień";
-        topAccuracyTxt.text = topAccuracy + "% trafień";
+        this.accuracy.text = accuracy + "% trafień";
+        this.topAccuracy.text = topAccuracy + "% trafień";
     }
 }

@@ -13,14 +13,15 @@ public class GameSceneManangment : MonoBehaviour, IMessage
     public Transform enemiesParent;
     public GameObject enemyPrefab;
     public Shooting playerShootingScript;
+    public Transform[] spawnArenaCorners;
 
     [Header("HealthBars")]
     public Transform healthBarParent;
-    public GameObject healtBarPrefab;
-    public float healtBarHeight;
+    public GameObject healthBarPrefab;
+    public float healthBarHeight;
 
     RestartWindowUpdater restartMenuUpdater;
-    Dictionary<EnemyHandler, HeathBar> liveEnemies;
+    Dictionary<EnemyHandler, HpFollowingBar> aliveEnemies;
     bool isEndHandled;
 
     public void ResetScene()
@@ -32,7 +33,7 @@ public class GameSceneManangment : MonoBehaviour, IMessage
     {
         EnemyHandler key = null;
 
-        foreach (var row in liveEnemies)
+        foreach (var row in aliveEnemies)
         {
             if (row.Key.gameObject.Equals(enemy))
             {
@@ -41,7 +42,7 @@ public class GameSceneManangment : MonoBehaviour, IMessage
                 break;
             }
         }
-        liveEnemies.Remove(key);
+        aliveEnemies.Remove(key);
     }
 
     void OnEnable()
@@ -51,22 +52,23 @@ public class GameSceneManangment : MonoBehaviour, IMessage
 
     void CreateEnemies()
     {
-        liveEnemies = new Dictionary<EnemyHandler, HeathBar>();
+        aliveEnemies = new Dictionary<EnemyHandler, HpFollowingBar>();
         for (int i = 0; i < GameData.enemiesToSpawn; i++)
         {
             Vector3 spawnPos = DrawEnemyPosition(i);
             EnemyHandler newEnemy = CreateEnemy(spawnPos);
-            HeathBar enemyHealtBar = CreateEnemyHealthBar(newEnemy).GetComponent<HeathBar>();
-            liveEnemies.Add(newEnemy, enemyHealtBar);
+            HpFollowingBar enemyHealtBar = CreateEnemyHealthBar(newEnemy).GetComponent<HpFollowingBar>();
+            aliveEnemies.Add(newEnemy, enemyHealtBar);
             newEnemy.GetComponent<EnemyHandler>().message = this;
         }
     }
 
     Vector3 DrawEnemyPosition(int i)
     {
-        Vector3 pos = transform.position;
-        pos.y += 1;
-        pos.x += i * 20;
+        Vector3 pos = new Vector3(0,enemyPrefab.transform.position.y,0);
+        pos.x = Random.Range(spawnArenaCorners[0].position.x, (spawnArenaCorners[2].position.x));
+        pos.z = Random.Range(spawnArenaCorners[0].position.z, (spawnArenaCorners[1].position.z));
+
         return pos;
     }
 
@@ -75,13 +77,13 @@ public class GameSceneManangment : MonoBehaviour, IMessage
         return Instantiate<GameObject>(enemyPrefab, pos, Quaternion.identity, enemiesParent).GetComponent<EnemyHandler>();
     }
 
-    HeathBar CreateEnemyHealthBar(EnemyHandler enemy)
+    HpFollowingBar CreateEnemyHealthBar(EnemyHandler enemy)
     {
         Vector3 pos = HealthBarPosition(enemy.transform.position);
         Quaternion lookAt = playerShootingScript.transform.rotation;
 
-        GameObject healtBar = Instantiate<GameObject>(healtBarPrefab, pos, lookAt, healthBarParent);
-        HeathBar bar = healtBar.GetComponent<HeathBar>();
+        GameObject healthBar = Instantiate<GameObject>(healthBarPrefab, pos, lookAt, healthBarParent);
+        HpFollowingBar bar = healthBar.GetComponent<HpFollowingBar>();
 
         return bar;
     }
@@ -89,14 +91,14 @@ public class GameSceneManangment : MonoBehaviour, IMessage
     Vector3 HealthBarPosition(Vector3 enemyPos)
     {
         Vector3 pos = enemyPos;
-        pos.y += healtBarHeight;
+        pos.y += healthBarHeight;
         return pos;
     }
 
     void Start()
     {
         restartMenuUpdater = restartMenuUI.gameObject.GetComponent<RestartWindowUpdater>();
-        foreach (var row in liveEnemies)
+        foreach (var row in aliveEnemies)
         {
             row.Value.Init(row.Key.maxHP);
         }
@@ -104,23 +106,13 @@ public class GameSceneManangment : MonoBehaviour, IMessage
 
     void Update()
     {
-        if (!isEndHandled && liveEnemies.Count == 0)
+        if (!isEndHandled && aliveEnemies.Count == 0)
             EndRound();
 
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
 
         UpdateHealtBars();
-    }
-
-    void UpdateHealtBars()
-    {
-        foreach (var row in liveEnemies)
-        {
-            row.Value.transform.position = HealthBarPosition(row.Key.transform.position);
-            row.Value.transform.rotation = playerShootingScript.transform.rotation;
-            row.Value.UpdateHP(row.Key.HP);
-        }
     }
 
     void EndRound()
@@ -154,5 +146,18 @@ public class GameSceneManangment : MonoBehaviour, IMessage
         gameUI.enabled = false;
         restartMenuUI.enabled = true;
     }
+
+    void UpdateHealtBars()
+    {
+        foreach (var row in aliveEnemies)
+        {
+            row.Value.transform.position = HealthBarPosition(row.Key.transform.position);
+            row.Value.transform.rotation = playerShootingScript.transform.rotation;
+            row.Value.UpdateHP(row.Key.HP);
+        }
+    }
+
+
+
 
 }

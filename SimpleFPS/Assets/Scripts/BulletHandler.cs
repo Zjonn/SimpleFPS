@@ -21,11 +21,11 @@ public class BulletHandler : Ammo
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isShooterIsPlayer() && collision.gameObject.tag == "Enemy") shooter.GetComponent<Shooting>().ConfirmHit();
+        if (IsShooterPlayer() && collision.gameObject.tag == "Enemy") shooter.GetComponent<Shooting>().ConfirmHit();
         Destroy(gameObject);
     }
 
-    private bool isShooterIsPlayer()
+    private bool IsShooterPlayer()
     {
         return shooter != null && shooter.name == "Player";
     }

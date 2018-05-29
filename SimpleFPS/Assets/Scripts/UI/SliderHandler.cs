@@ -5,13 +5,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class SliderHandler : MonoBehaviour
 {
-    public Text text;
+    public Text enemySpawn;
 
     private Slider slider;
 
     public void AssignSliderValue()
     {
-        text.text = "Przeciwnicy: " + slider.value;
+        enemySpawn.text = "Przeciwnicy: " + slider.value;
         GameData.enemiesToSpawn = (int)slider.value;
     }
     // Use this for initialization

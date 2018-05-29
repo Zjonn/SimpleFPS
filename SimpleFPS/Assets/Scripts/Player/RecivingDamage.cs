@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(Collider))]
-public class EnemyHandler : MonoBehaviour {
 
-    public IMessage message;
+public class RecivingDamage : MonoBehaviour {
+
+    public HealthBar healthBar;
+
     public int maxHP;
 
-    public float HP
-    {
-        get;
-        private set;
-    }
+    float hp;
+
 	// Use this for initialization
 	void Start () {
-        HP = maxHP;
+        hp = maxHP;
+        healthBar.Init(maxHP);
 	}
 	
 	// Update is called once per frame
@@ -33,11 +32,13 @@ public class EnemyHandler : MonoBehaviour {
 
     void TakeDamage(float damage)
     {
-        HP -= damage;
-        if(HP <= 0)
+        hp -= damage;
+        if (hp <= 0)
         {
-            message.DeadMessage(gameObject);
+            Destroy(healthBar.gameObject);
             Destroy(gameObject);
         }
+        else
+            healthBar.UpdateHP(hp);
     }
 }

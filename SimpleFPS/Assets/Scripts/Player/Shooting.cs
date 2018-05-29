@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform spawnPosition;
-    public string ShootButtonName;
+    public string shootButtonName;
     public float breakBetweenShoots = 100;
 
     public float Accuracy
@@ -34,7 +34,7 @@ public class Shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputManager.GetButton(ShootButtonName) && breakTime <= 0)
+        if (InputManager.GetButton(shootButtonName) && breakTime <= 0)
         {
             Fire();
             breakTime = breakBetweenShoots;
