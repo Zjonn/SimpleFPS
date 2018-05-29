@@ -6,6 +6,8 @@ public class RecivingDamage : MonoBehaviour {
 
     public HealthBar healthBar;
 
+    public GameSceneManangment manager;
+
     public int maxHP;
 
     float hp;
@@ -35,8 +37,7 @@ public class RecivingDamage : MonoBehaviour {
         hp -= damage;
         if (hp <= 0)
         {
-            Destroy(healthBar.gameObject);
-            Destroy(gameObject);
+            manager.ReciveGameObject(gameObject);
         }
         else
             healthBar.UpdateHP(hp);

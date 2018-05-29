@@ -4,8 +4,8 @@ using UnityEngine;
 
 public static class GameData
 {
-    public static int enemiesToSpawn = 1;
+    public static int enemiesToSpawn = 2;
 
-    public static float playerTopAccuracy = 0;
+    public static float playerTopAccuracy;
 
 }

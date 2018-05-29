@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IMessage {
-    void DeadMessage(GameObject enemy);
+    void ReciveGameObject(GameObject enemy);
 }

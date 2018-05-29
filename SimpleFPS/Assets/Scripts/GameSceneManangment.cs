@@ -15,13 +15,9 @@ public class GameSceneManangment : MonoBehaviour, IMessage
     public Shooting playerShootingScript;
     public Transform[] spawnArenaCorners;
 
-    [Header("HealthBars")]
-    public Transform healthBarParent;
-    public GameObject healthBarPrefab;
-    public float healthBarHeight;
 
     RestartWindowUpdater restartMenuUpdater;
-    Dictionary<EnemyHandler, HpFollowingBar> aliveEnemies;
+    int aliveEnemies = GameData.enemiesToSpawn;
     bool isEndHandled;
 
     public void ResetScene()
@@ -29,20 +25,9 @@ public class GameSceneManangment : MonoBehaviour, IMessage
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void DeadMessage(GameObject enemy)
+    public void ReciveGameObject(GameObject enemy)
     {
-        EnemyHandler key = null;
-
-        foreach (var row in aliveEnemies)
-        {
-            if (row.Key.gameObject.Equals(enemy))
-            {
-                key = row.Key;
-                Destroy(row.Value);
-                break;
-            }
-        }
-        aliveEnemies.Remove(key);
+        aliveEnemies--;
     }
 
     void OnEnable()
@@ -52,20 +37,20 @@ public class GameSceneManangment : MonoBehaviour, IMessage
 
     void CreateEnemies()
     {
-        aliveEnemies = new Dictionary<EnemyHandler, HpFollowingBar>();
+        Rigidbody playerRb = playerShootingScript.gameObject.GetComponent<Rigidbody>();
+
         for (int i = 0; i < GameData.enemiesToSpawn; i++)
         {
             Vector3 spawnPos = DrawEnemyPosition(i);
             EnemyHandler newEnemy = CreateEnemy(spawnPos);
-            HpFollowingBar enemyHealtBar = CreateEnemyHealthBar(newEnemy).GetComponent<HpFollowingBar>();
-            aliveEnemies.Add(newEnemy, enemyHealtBar);
-            newEnemy.GetComponent<EnemyHandler>().message = this;
+            newEnemy.message = this;
+            newEnemy.player = playerRb;
         }
     }
 
     Vector3 DrawEnemyPosition(int i)
     {
-        Vector3 pos = new Vector3(0,enemyPrefab.transform.position.y,0);
+        Vector3 pos = new Vector3(0, enemyPrefab.transform.position.y, 0);
         pos.x = Random.Range(spawnArenaCorners[0].position.x, (spawnArenaCorners[2].position.x));
         pos.z = Random.Range(spawnArenaCorners[0].position.z, (spawnArenaCorners[1].position.z));
 
@@ -77,42 +62,19 @@ public class GameSceneManangment : MonoBehaviour, IMessage
         return Instantiate<GameObject>(enemyPrefab, pos, Quaternion.identity, enemiesParent).GetComponent<EnemyHandler>();
     }
 
-    HpFollowingBar CreateEnemyHealthBar(EnemyHandler enemy)
-    {
-        Vector3 pos = HealthBarPosition(enemy.transform.position);
-        Quaternion lookAt = playerShootingScript.transform.rotation;
-
-        GameObject healthBar = Instantiate<GameObject>(healthBarPrefab, pos, lookAt, healthBarParent);
-        HpFollowingBar bar = healthBar.GetComponent<HpFollowingBar>();
-
-        return bar;
-    }
-
-    Vector3 HealthBarPosition(Vector3 enemyPos)
-    {
-        Vector3 pos = enemyPos;
-        pos.y += healthBarHeight;
-        return pos;
-    }
 
     void Start()
     {
         restartMenuUpdater = restartMenuUI.gameObject.GetComponent<RestartWindowUpdater>();
-        foreach (var row in aliveEnemies)
-        {
-            row.Value.Init(row.Key.maxHP);
-        }
     }
 
     void Update()
     {
-        if (!isEndHandled && aliveEnemies.Count == 0)
+        if (!isEndHandled && aliveEnemies == 0)
             EndRound();
 
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
-
-        UpdateHealtBars();
     }
 
     void EndRound()
@@ -146,18 +108,6 @@ public class GameSceneManangment : MonoBehaviour, IMessage
         gameUI.enabled = false;
         restartMenuUI.enabled = true;
     }
-
-    void UpdateHealtBars()
-    {
-        foreach (var row in aliveEnemies)
-        {
-            row.Value.transform.position = HealthBarPosition(row.Key.transform.position);
-            row.Value.transform.rotation = playerShootingScript.transform.rotation;
-            row.Value.UpdateHP(row.Key.HP);
-        }
-    }
-
-
 
 
 }

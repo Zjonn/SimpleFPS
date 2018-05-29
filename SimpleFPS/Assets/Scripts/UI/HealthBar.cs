@@ -22,6 +22,6 @@ public class HealthBar : MonoBehaviour
     {
         float hpFactor = hp / maxHP;
         bar.fillAmount = hpFactor;
-        hpText.color = new Color(255 * hpFactor, 255 * hpFactor, 255 * hpFactor);
+        hpText.color = new Color(hpFactor, hpFactor, hpFactor);
     }
 }

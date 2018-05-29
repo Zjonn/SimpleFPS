@@ -16,10 +16,10 @@ public class Shooting : MonoBehaviour
         get { return Mathf.Round(hit / (float)shootedBullets * 100); }
     }
 
-    private float breakTime;
+    float breakTime;
 
-    private int shootedBullets;
-    private int hit;
+    int shootedBullets;
+    int hit;
 
     public void ConfirmHit()
     {
@@ -40,7 +40,6 @@ public class Shooting : MonoBehaviour
             breakTime = breakBetweenShoots;
         }
         breakTime = (breakTime <= 0) ? 0 : breakTime - Time.deltaTime;
-
     }
 
     private void Fire()

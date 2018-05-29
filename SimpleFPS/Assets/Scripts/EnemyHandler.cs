@@ -2,25 +2,80 @@
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Collider))]
-public class EnemyHandler : MonoBehaviour {
+public class EnemyHandler : MonoBehaviour
+{
+    [HideInInspector]
+    public Rigidbody player;
+    public GameObject healthBarPrefab;
+
+    public GameObject bulletPrefab;
+    public Transform spawnPosition;
+    public Transform gun;
+    public float breakBetweenShoots = 100;
 
     public IMessage message;
     public int maxHP;
 
-    public float HP
+    float hp;
+    float breakTime;
+    float bulletSpeed;
+
+    FollowingHealthBar healthBar;
+
+    // Use this for initialization
+    void Start()
     {
-        get;
-        private set;
+        breakTime = 0;
+        hp = maxHP;
+        InitHealthBar();
+        bulletSpeed = bulletPrefab.GetComponent<Ammo>().speed;
     }
-	// Use this for initialization
-	void Start () {
-        HP = maxHP;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    void InitHealthBar()
+    {
+        GameObject bar = Instantiate<GameObject>(healthBarPrefab);
+        healthBar = bar.GetComponent<FollowingHealthBar>();
+        healthBar.Init(transform, player.transform, maxHP);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        AimAtPlayer();
+
+        if (breakTime <= 0)
+        {
+            Fire();
+            breakTime = breakBetweenShoots;
+        }
+        breakTime = (breakTime <= 0) ? 0 : breakTime - Time.deltaTime;
+
+
+        //transform.LookAt(player.transform);
+        //gun.LookAt(player.transform);
+    }
+
+    void AimAtPlayer()
+    {
+        Vector3 v = PredictPlayerPosition();
+        Quaternion rotation = Quaternion.LookRotation(v - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 60);
+        //transform.LookAt(v);
+        v.y -= 0.5f;
+        gun.LookAt(v);
+    }
+
+
+    Vector3 PredictPlayerPosition()
+    {
+        return player.position + player.velocity * bulletSpeed * Time.deltaTime;
+    }
+
+    void Fire()
+    {
+        GameObject bullet = Instantiate<GameObject>(bulletPrefab, spawnPosition.position, spawnPosition.rotation);
+        bullet.GetComponent<Ammo>().shooter = gameObject;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -33,11 +88,13 @@ public class EnemyHandler : MonoBehaviour {
 
     void TakeDamage(float damage)
     {
-        HP -= damage;
-        if(HP <= 0)
+        hp -= damage;
+        if (hp <= 0)
         {
-            message.DeadMessage(gameObject);
+            message.ReciveGameObject(gameObject);
             Destroy(gameObject);
         }
+        else
+            healthBar.UpdateHP(hp);
     }
 }

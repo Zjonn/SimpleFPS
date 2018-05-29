@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114549905178136982}
   - component: {fileID: 96850654917463634}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Bullet 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.9528302, g: 0.03146139, b: 0.03146139, a: 1}
+      key0: {r: 0.031372532, g: 0.21794568, b: 0.9529412, a: 1}
       key1: {r: 0.9528302, g: 0.03146139, b: 0.03146139, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
