@@ -3,17 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider)), RequireComponent(typeof(Rigidbody))]
-public class BulletHandler : MonoBehaviour, IBullet
+public class BulletHandler : Ammo
 {
-    public float speed;
-
     Rigidbody rb;
-    GameObject shooter;
-
-    public void SetShooter(GameObject shooter)
-    {
-        this.shooter = shooter;
-    }
 
     // Update is called once per frame
     void Start()
@@ -29,7 +21,7 @@ public class BulletHandler : MonoBehaviour, IBullet
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isShooterIsPlayer()) shooter.GetComponent<Shooting>().ConfirmHit();
+        if (isShooterIsPlayer() && collision.gameObject.tag == "Enemy") shooter.GetComponent<Shooting>().ConfirmHit();
         Destroy(gameObject);
     }
 

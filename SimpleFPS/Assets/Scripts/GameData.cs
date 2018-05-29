@@ -5,5 +5,11 @@ using UnityEngine;
 public static class GameData
 {
     public static int enemiesToSpawn = 1;
-    public static float playerAccuracy = 0;
+
+    static float _playerTopAccuracy = 0;
+    public static float PlayerTopAccuracy
+    {
+        set { _playerTopAccuracy = value; }
+        get { return _playerTopAccuracy; }
+    }
 }

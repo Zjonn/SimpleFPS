@@ -11,9 +11,9 @@ public class Shooting : MonoBehaviour
     public string ShootButtonName;
     public float breakBetweenShoots = 100;
 
-    public int Accuracy
+    public float Accuracy
     {
-        get { return hit / shootedBullets; }
+        get { return Mathf.Round(hit / (float)shootedBullets * 100); }
     }
 
     private float breakTime;
@@ -46,7 +46,7 @@ public class Shooting : MonoBehaviour
     private void Fire()
     {
         GameObject bullet = Instantiate<GameObject>(bulletPrefab, spawnPosition.position, spawnPosition.rotation);
-        bullet.GetComponent<IBullet>().SetShooter(gameObject);
+        bullet.GetComponent<Ammo>().shooter = gameObject;
         shootedBullets++;
     }
 
