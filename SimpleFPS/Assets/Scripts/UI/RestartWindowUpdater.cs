@@ -10,7 +10,7 @@ public class RestartWindowUpdater : MonoBehaviour {
 	
     public void UpdateText(float accuracy, float topAccuracy)
     {
-        accuracyTxt.text = accuracy + " %";
-        topAccuracyTxt.text = topAccuracy + " %";
+        accuracyTxt.text = accuracy + "% trafień";
+        topAccuracyTxt.text = topAccuracy + "% trafień";
     }
 }

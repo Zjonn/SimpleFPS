@@ -7,10 +7,14 @@ public class EnemyHandler : MonoBehaviour {
     public IMessage message;
     public int maxHP;
 
-    float hp;
+    public float HP
+    {
+        get;
+        private set;
+    }
 	// Use this for initialization
 	void Start () {
-        hp = maxHP;
+        HP = maxHP;
 	}
 	
 	// Update is called once per frame
@@ -20,8 +24,8 @@ public class EnemyHandler : MonoBehaviour {
 
     void TakeDamage(float damage)
     {
-        hp -= damage;
-        if(hp <= 0)
+        HP -= damage;
+        if(HP <= 0)
         {
             message.DeadMessage(gameObject);
             GameObject.Destroy(gameObject);
