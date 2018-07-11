@@ -1,8 +1,9 @@
 # SimpleFPS
-### Gra-zadanie rekrutacyjne
-#### W repozytrium oraz na [dysku google](https://drive.google.com/open?id=1k6owSyYGVDTdzNtgv98MYvbzh1aKL7M3) znajduje się plik .apk
+### This is simple game created in unity for smartphones. I used basic objects (square, circle etc.). All static shadows are baked.
 
-#### Jak działa sterowanie:
-- Lewy joystick - ruch postaci
-- Prawy joystick - ruch kamerą
-- Tapniecię w pozostałe miejsca - strzelanie
+
+
+#### Control:
+- Left joystick - character move
+- Right joystick - camera
+- Taping in screen - shooting
