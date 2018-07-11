@@ -1,5 +1,6 @@
 # SimpleFPS
-### This is simple game created in unity for smartphones. I used basic objects (square, circle etc.). All static shadows are baked.
+### About project
+This is simple game created in unity for smartphones. I used basic objects (square, circle etc.). All static shadows are baked.
 
 
 
