@@ -10,5 +10,5 @@ This is simple game created in unity for smartphones. I used basic objects (squa
 - Taping in screen - shooting
 
 ### Screenshots
-![img1](img/img1.jpg)
+![img1](img/img3.jpg)
 ![img2](img/img2.jpg)
